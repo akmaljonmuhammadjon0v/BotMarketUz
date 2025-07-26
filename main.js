@@ -1,8 +1,8 @@
 const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
 
-const token = process.env.BOT_TOKEN; // Replace with your bot token
-const channelId = '@zakazchatbot416'; // Replace with your channel username
+const token = process.env.BOT_TOKEN;
+const channelId = process.env.Channel_Id;
 
 const bot = new TelegramBot(token, { polling: true });
 
@@ -11,7 +11,7 @@ bot.setMyCommands([
 	{ command: '/about', description: 'Bu bot haqida ma’lumot' },
 ]);
 
-const userSteps = {}; // Step tracking for each user
+const userSteps = {};
 
 const sellerQuestions = [
 	{ text: '🔒 Botni Username:', key: 'user' },
@@ -32,7 +32,6 @@ const buyerQuestions = [
 	{ text: '💬 Izoh:', key: 'comment' },
 ];
 
-// Function to ask the next question
 function askNextQuestion(chatId) {
 	const step = userSteps[chatId].step;
 	const questions = userSteps[chatId].isSeller
@@ -50,7 +49,6 @@ function askNextQuestion(chatId) {
 	}
 }
 
-// Function to finalize and send the data
 function finalizeData(chatId) {
 	const postData = userSteps[chatId].data;
 	const isSeller = userSteps[chatId].isSeller;
@@ -91,7 +89,7 @@ Kanal: @zakazchatbot416`;
 			.sendMessage(channelId, messageTemplate)
 			.then(() => {
 				bot.sendMessage(chatId, 'Sizning xabaringiz kanalga yuborildi ✅');
-				delete userSteps[chatId]; // Reset user steps
+				delete userSteps[chatId];
 			})
 			.catch(error => {
 				console.error(error);
@@ -100,10 +98,9 @@ Kanal: @zakazchatbot416`;
 					'Xabaringizni kanalga yuborishda xatolik yuz berdi. 😩'
 				);
 			});
-	}, 60000); // 1-minute delay
+	}, 60000);
 }
 
-// Handle /start command
 bot.onText(/\/start/, msg => {
 	const chatId = msg.chat.id;
 	bot.sendMessage(
@@ -120,14 +117,12 @@ bot.onText(/\/start/, msg => {
 	);
 });
 
-// Handle /about command
 bot.onText(/\/about/, msg => {
 	const chatId = msg.chat.id;
 	const text = `Bu bot orqali siz botlaringizni sotishingiz yoki sotib olishingiz mumkin. Botni savollariga javob berganingizdan so‘ng ma’lumotni avtomatik ravishda kanalga yuboradi.`;
 	bot.sendMessage(chatId, text, { parse_mode: 'HTML' });
 });
 
-// Handle button clicks
 bot.on('callback_query', callbackQuery => {
 	const chatId = callbackQuery.message.chat.id;
 	const action = callbackQuery.data;
@@ -141,7 +136,6 @@ bot.on('callback_query', callbackQuery => {
 	askNextQuestion(chatId);
 });
 
-// Handle user messages
 bot.on('message', msg => {
 	const chatId = msg.chat.id;
 
@@ -166,7 +160,6 @@ bot.on('message', msg => {
 	}
 });
 
-// Handle errors
 bot.on('polling_error', error => {
 	console.error('Polling error:', error.code, error.message);
 });
