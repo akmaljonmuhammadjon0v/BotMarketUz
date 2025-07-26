@@ -123,7 +123,7 @@ bot.onText(/\/start/, msg => {
 // Handle /about command
 bot.onText(/\/about/, msg => {
 	const chatId = msg.chat.id;
-	const text = `Bu bot orqali siz botlaringizni sotishingiz yoki sotib olishingiz mumkin. Bot savollarga javob berganingizdan so‘ng ma’lumotni avtomatik ravishda kanalga yuboradi.`;
+	const text = `Bu bot orqali siz botlaringizni sotishingiz yoki sotib olishingiz mumkin. Botni savollariga javob berganingizdan so‘ng ma’lumotni avtomatik ravishda kanalga yuboradi.`;
 	bot.sendMessage(chatId, text, { parse_mode: 'HTML' });
 });
 
